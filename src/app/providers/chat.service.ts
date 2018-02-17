@@ -16,12 +16,21 @@ export class ChatService {
 
   cargarMensajes() {
     //item lo q recibe y el nombre del nombre = chats
-    this.itemsCollection = this.afs.collection<Mensaje>("chats");
+    this.itemsCollection = this.afs.collection<Mensaje>("chats", ref => ref.orderBy('fecha', 'asc').limit(5) );
     //estoy pendiente de los cambios en el nodo chats
     //.map: trabaja con un observable la trasforma y regresa algo
     return this.itemsCollection.valueChanges().map((mensajes: Mensaje[]) => {
       console.log(mensajes);
-      this.chats= mensajes;
+      //this.chats= mensajes;
+
+      this.chats=[];
+      for(let mensaje of mensajes){
+        this.chats.unshift(mensaje);
+      }
+      return this.chats;
+
+
+
     });
   }
 
